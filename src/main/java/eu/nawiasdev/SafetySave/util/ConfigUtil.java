@@ -21,8 +21,8 @@ public final class ConfigUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        PERIOD = Integer.parseInt(properties.getProperty("port"));
-        SHOULD_REBOOT = Boolean.parseBoolean(properties.getProperty("jwt-secret"));
+        PERIOD = Integer.parseInt(properties.getProperty("period"));
+        SHOULD_REBOOT = Boolean.parseBoolean(properties.getProperty("should-reboot"));
         TimeZone tz = TimeZone.getTimeZone(properties.getProperty("timezone"));
         if (!tz.equals(TimeZone.getTimeZone("GMT"))){
             TIMEZONE = tz;

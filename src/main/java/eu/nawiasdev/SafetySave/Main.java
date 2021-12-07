@@ -18,15 +18,13 @@ public class Main extends JavaPlugin {
     private final Logger logger = server.getLogger();
     private final Timer safetySaveTimer = new Timer("SafetySaveTimer");
     private final Timer rebootTimer = new Timer("RebootTimer");
-    {
-        FileTreeInitializer.initialize();
-    }
 
     @Override
     public void onEnable() {
+        FileTreeInitializer.initialize();
         ConfigUtil.initialize();
         PluginDescriptionFile pluginDescriptionFile = this.getDescription();
-        logger.info(pluginDescriptionFile.getFullName() + "Enabled");
+        logger.info(pluginDescriptionFile.getFullName() + " Enabled");
         setupSafetySave();
         setupReboot();
     }
@@ -34,7 +32,7 @@ public class Main extends JavaPlugin {
     private void setupReboot() {
         if (ConfigUtil.SHOULD_REBOOT) {
             Calendar calendar = getCalendar();
-            logger.info("The server will reboot on "+ calendar);
+            logger.info("The server will reboot on "+ calendar.getTime().toString());
             rebootTimer.schedule(new RebootTask(),calendar.getTime());
             PluginManager pluginManager = server.getPluginManager();
             pluginManager.registerEvent(
