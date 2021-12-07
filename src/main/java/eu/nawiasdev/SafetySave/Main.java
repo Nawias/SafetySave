@@ -2,6 +2,7 @@ package eu.nawiasdev.SafetySave;
 
 import eu.nawiasdev.SafetySave.util.ConfigUtil;
 import eu.nawiasdev.SafetySave.util.FileTreeInitializer;
+import jdk.nashorn.internal.runtime.regexp.joni.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
@@ -51,8 +52,8 @@ public class Main extends JavaPlugin {
 
     private Calendar getCalendar() {
         Calendar calendar = Calendar.getInstance(ConfigUtil.TIMEZONE);
-        calendar.set(Calendar.HOUR, 4);
-        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.HOUR_OF_DAY, ConfigUtil.HOUR);
+        calendar.set(Calendar.MINUTE, ConfigUtil.MINUTE);
         calendar.set(Calendar.SECOND,0);
         if(new Date().getTime() > calendar.getTime().getTime())
             calendar.add(Calendar.DATE,1);
