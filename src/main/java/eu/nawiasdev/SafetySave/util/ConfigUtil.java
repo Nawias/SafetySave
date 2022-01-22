@@ -1,5 +1,7 @@
 package eu.nawiasdev.SafetySave.util;
 
+import org.bukkit.Bukkit;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,16 +39,20 @@ public final class ConfigUtil {
         try{
             InputStream inputStream = new FileInputStream(PROPERTIES_FILE);
             properties.load(inputStream);
+
+            PERIOD = tryParseProp(Integer::parseInt, PERIOD, properties.getProperty("period"));
+            SHOULD_REBOOT = tryParseProp(Boolean::parseBoolean, SHOULD_REBOOT, properties.getProperty("should-reboot"));
+
+            TimeZone tz = TimeZone.getTimeZone(tryParseProp(String::toString,"GMT",properties.getProperty("timezone")));
+            if (!tz.equals(TimeZone.getTimeZone("GMT"))){
+                TIMEZONE = tz;
+            }
+            HOUR = tryParseProp(Integer::parseInt, HOUR, properties.getProperty("hour"));
+            MINUTE = tryParseProp(Integer::parseInt, MINUTE, properties.getProperty("minute"));
+            Bukkit.getServer().getLogger().info("TimeZone: "+TIMEZONE.getDisplayName());
+            Bukkit.getServer().getLogger().info("Reboot time: "+HOUR+":"+MINUTE);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        PERIOD = tryParseProp(Integer::parseInt, PERIOD, properties.getProperty("period"));
-        SHOULD_REBOOT = tryParseProp(Boolean::parseBoolean, SHOULD_REBOOT, properties.getProperty("should-reboot"));
-        TimeZone tz = TimeZone.getTimeZone(properties.getProperty("timezone"));
-        if (!tz.equals(TimeZone.getTimeZone("GMT"))){
-            TIMEZONE = tz;
-        }
-        HOUR = tryParseProp(Integer::parseInt, HOUR, properties.getProperty("hour"));
-        MINUTE = tryParseProp(Integer::parseInt, MINUTE, properties.getProperty("minute"));
     }
 }

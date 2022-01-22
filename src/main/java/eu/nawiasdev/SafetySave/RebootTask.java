@@ -15,23 +15,25 @@ public class RebootTask extends TimerTask {
 
     @Override
     public void run() {
-        ProcessBuilder builder = new ProcessBuilder();
-        Bukkit.getServer().savePlayers();
-        Bukkit.getServer().getWorlds().get(0).save();
+        rebootWithRuntime();
+    }
+
+    private void rebootWithRuntime() {
+        String shutdownCommand;
         Logger logger = Bukkit.getServer().getLogger();
+        Runtime runtime = Runtime.getRuntime();
         if(isWindows) {
-            builder.command("cmd.exe","shutdown /r -t 0");
+            shutdownCommand = "shutdown.exe /r /t 0";
+            logger.info("Rebooting Windows");
         } else {
-            builder.command("sh", "reboot");
+            logger.info("Rebooting Linux");
+            shutdownCommand = "reboot";
         }
-        builder.directory(new File(System.getProperty("user.home")));
         try {
-            Process process = builder.start();
-            StreamGobbler streamGobbler = new StreamGobbler(process.getInputStream(), logger::info);
-            Executors.newSingleThreadExecutor().submit(streamGobbler);
-            int exitCode = process.waitFor();
-        } catch (IOException | InterruptedException e) {
+            runtime.exec(shutdownCommand);
+        } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 }
